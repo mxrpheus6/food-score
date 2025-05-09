@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  products-db:
+    image: postgres:17.5
+    container_name: products_db
+    environment:
+      POSTGRES_DB: products_db
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - products_data:/var/lib/postgresql/data
+    networks:
+      - food-score-network
+    healthcheck:
+      test: pg_isready
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+networks:
+  food-score-network:
+    name: food-score-network
+    driver: bridge
+
+volumes:
+  products_data:
