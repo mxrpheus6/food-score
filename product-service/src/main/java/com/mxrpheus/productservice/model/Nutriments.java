@@ -1,0 +1,24 @@
+package com.mxrpheus.productservice.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+@Data
+
+@Embeddable
+public class Nutriments {
+    @Column(name = "energy_kcal_100g", nullable = false)
+    private Integer energyKcal100g;
+
+    @Column(name = "proteins_100g", nullable = false, precision = 10, scale = 2)
+    private BigDecimal proteins100g;
+
+    @Column(name = "fat_100g", nullable = false, precision = 10, scale = 2)
+    private BigDecimal fat100g;
+
+    @Column(name = "sugars_100g", nullable = false, precision = 10, scale = 2)
+    private BigDecimal sugars100g;
+}
