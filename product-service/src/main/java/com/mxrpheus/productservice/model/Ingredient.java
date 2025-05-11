@@ -15,12 +15,18 @@ import lombok.Data;
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
+    @Column(name = "is_allergen", nullable = false)
     private Boolean isAllergen;
+
+    @Column(name = "is_vegan", nullable = false)
     private Boolean isVegan;
+
+    @Column(name = "is_vegetarian", nullable = false)
     private Boolean isVegetarian;
 }
