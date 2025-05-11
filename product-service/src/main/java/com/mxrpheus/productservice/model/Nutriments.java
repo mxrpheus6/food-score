@@ -19,6 +19,15 @@ public class Nutriments {
     @Column(name = "fat_100g", nullable = false, precision = 10, scale = 2)
     private BigDecimal fat100g;
 
-    @Column(name = "sugars_100g", nullable = false, precision = 10, scale = 2)
+    @Column(name = "sugars_100g", precision = 10, scale = 2)
     private BigDecimal sugars100g;
+
+    @Column(name = "saturated_fat_100g ", precision = 10, scale = 2)
+    private BigDecimal saturatedFat100g;
+
+    @Column(name = "fiber_100g", precision = 10, scale = 2)
+    private BigDecimal fiber100g;
+
+    @Column(name = "salt_100g", precision = 10, scale = 2)
+    private BigDecimal salt100g;
 }

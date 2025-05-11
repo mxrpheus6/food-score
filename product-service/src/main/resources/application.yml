@@ -15,7 +15,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create.
+      ddl-auto: create
     properties:
       hibernate:
         dialect: ${DB_DIALECT}

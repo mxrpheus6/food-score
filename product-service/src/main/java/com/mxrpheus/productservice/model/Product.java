@@ -1,9 +1,12 @@
 package com.mxrpheus.productservice.model;
 
+import com.mxrpheus.productservice.model.enums.ProductType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -62,6 +65,10 @@ public class Product {
 
     @Embedded
     private Nutriments nutriments;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "product_type", nullable = false)
+    private ProductType productType;
 
     @Column(name = "nutri_score")
     private String nutriScore;
