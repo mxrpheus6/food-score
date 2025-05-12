@@ -87,16 +87,16 @@ public class ProductScoreService {
         return getPoints(n.getProteins100g().doubleValue(), new double[]{1.6, 3.2, 4.8, 6.4, 8.0});
     }
 
-    private int getPoints(double value, double[] thresholds) {
-        for (int i = thresholds.length - 1; i >= 0; i--) {
-            if (value > thresholds[i]) return i + 1;
+    private int getPoints(double value, double[] borders) {
+        for (int i = borders.length - 1; i >= 0; i--) {
+            if (value > borders[i]) return i + 1;
         }
         return 0;
     }
 
-    private int getPoints(int value, int[] thresholds) {
-        for (int i = thresholds.length - 1; i >= 0; i--) {
-            if (value > thresholds[i]) return i + 1;
+    private int getPoints(int value, int[] borders) {
+        for (int i = borders.length - 1; i >= 0; i--) {
+            if (value > borders[i]) return i + 1;
         }
         return 0;
     }
