@@ -6,9 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 
 @Entity
 @Table(name = "ingredient")
@@ -20,9 +26,6 @@ public class Ingredient {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    @Column(name = "is_allergen", nullable = false)
-    private Boolean isAllergen;
 
     @Column(name = "is_vegan", nullable = false)
     private Boolean isVegan;

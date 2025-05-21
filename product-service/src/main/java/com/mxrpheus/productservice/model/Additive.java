@@ -1,6 +1,6 @@
 package com.mxrpheus.productservice.model;
 
-import com.mxrpheus.productservice.model.enums.IngredientType;
+import com.mxrpheus.productservice.model.enums.RiskLevel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,17 +20,26 @@ import lombok.Setter;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "ingredient_classifier")
-public class IngredientClassifier {
+@Table(name = "additive")
+public class Additive {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "pattern", nullable = false)
-    private String pattern;
+    @Column(name = "e_code", nullable = false, unique = true)
+    private String eCode;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "description", nullable = false, length = 1024)
+    private String description;
+
+    @Column(name = "is_banned", nullable = false)
+    private Boolean isBanned;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "classified_as", nullable = false)
-    private IngredientType classifiedAs;
+    @Column(name = "risk_level", nullable = false)
+    private RiskLevel riskLevel;
 }

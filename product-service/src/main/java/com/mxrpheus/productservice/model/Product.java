@@ -12,14 +12,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -42,26 +44,34 @@ public class Product {
     private String productName;
 
     @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
 
     @Column(name = "quantity", nullable = false)
     private String quantity;
 
-    @Column(name = "packaging", nullable = false)
-    private String packaging;
-
-    @Column(name = "origin", nullable = false)
-    private String origin;
-
     @Column(name = "ingredients_text", nullable = false)
     private String ingredientsText;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductIngredient> parsedIngredients;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "product_ingredient",
+            joinColumns = @JoinColumn(name = "product_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id", nullable = false)
+    )
+    private List<Ingredient> ingredients = new ArrayList<>();
 
-    @Column(name = "is_palm_oil_used", nullable = false)
-    private Boolean isPalmOilUsed;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "product_additive",
+            joinColumns = @JoinColumn(name = "product_id", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "additive_id", nullable = false)
+    )
+    private List<Additive> additives = new ArrayList<>();
 
     @Embedded
     private Nutriments nutriments;
@@ -70,6 +80,6 @@ public class Product {
     @Column(name = "product_type", nullable = false)
     private ProductType productType;
 
-    @Column(name = "nutri_score")
-    private String nutriScore;
+    @Column(name = "product_score")
+    private String productScore;
 }
