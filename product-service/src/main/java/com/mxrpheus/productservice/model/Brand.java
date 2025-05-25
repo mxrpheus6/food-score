@@ -26,4 +26,7 @@ public class Brand {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    @Column(name = "website", nullable = false)
+    private String website;
 }
