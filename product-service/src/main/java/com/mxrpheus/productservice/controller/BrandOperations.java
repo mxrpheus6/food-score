@@ -4,9 +4,8 @@ import com.mxrpheus.productservice.dto.request.BrandRequest;
 import com.mxrpheus.productservice.dto.response.BrandResponse;
 import com.mxrpheus.productservice.dto.response.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,10 +26,11 @@ public interface BrandOperations {
     BrandResponse getBrandById(@PathVariable Long brandId);
 
     @Operation(summary = "Create new brand")
-    BrandResponse createBrand(@RequestBody BrandRequest brandRequest);
+    BrandResponse createBrand(@RequestBody @Valid BrandRequest brandRequest);
 
     @Operation(summary = "Update brand")
-    BrandResponse updateBrandById(@PathVariable Long brandId, @RequestBody BrandRequest brandRequest);
+    BrandResponse updateBrandById(@PathVariable Long brandId,
+                                  @Valid @RequestBody BrandRequest brandRequest);
 
     @Operation(summary = "Delete brand")
     void deleteBrandById(@PathVariable Long brandId);
