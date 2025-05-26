@@ -21,4 +21,5 @@ public interface BrandMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateBrandFromDto(BrandRequest brandRequest, @MappingTarget Brand brand);
+
 }

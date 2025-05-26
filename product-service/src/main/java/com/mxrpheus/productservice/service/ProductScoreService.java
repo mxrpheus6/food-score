@@ -100,4 +100,5 @@ public class ProductScoreService {
         }
         return 0;
     }
+
 }

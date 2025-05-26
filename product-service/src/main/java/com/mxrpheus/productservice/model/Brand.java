@@ -19,6 +19,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "brand")
 public class Brand {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -29,4 +30,5 @@ public class Brand {
 
     @Column(name = "website", nullable = false)
     private String website;
+
 }

@@ -19,6 +19,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "ingredient")
 public class Ingredient {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -32,4 +33,5 @@ public class Ingredient {
 
     @Column(name = "is_vegetarian", nullable = false)
     private Boolean isVegetarian;
+
 }

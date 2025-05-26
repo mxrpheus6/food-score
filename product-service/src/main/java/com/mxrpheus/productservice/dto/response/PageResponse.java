@@ -12,4 +12,5 @@ public record PageResponse<T>(
         long totalElements,
         String sort,
         List<T> values
-) {}
+) {
+}

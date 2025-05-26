@@ -24,6 +24,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "undesirable_ingredient")
 public class UndesirableIngredient {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,4 +39,5 @@ public class UndesirableIngredient {
     @Enumerated(EnumType.STRING)
     @Column(name = "risk_level", nullable = false)
     private RiskLevel riskLevel;
+
 }

@@ -17,7 +17,8 @@ public record BrandRequest(
         @Schema(description = "Brand's website", example = "https://www.coca-cola.com/")
         @Pattern(groups = { Marker.OnCreate.class, Marker.OnUpdate.class },
                 regexp = ApplicationConstants.WEBSITE_URL_REGEX,
-                message = "{brand_website.regexp.message}")
+                message = "{brand_website.regex.message}")
         String website
 
-) {}
+) {
+}

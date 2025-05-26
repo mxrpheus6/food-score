@@ -32,6 +32,7 @@ import java.util.List;
 @Entity
 @Table(name = "product", indexes = @Index(columnList = "barcode", unique = true))
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -82,4 +83,5 @@ public class Product {
 
     @Column(name = "product_score")
     private String productScore;
+
 }

@@ -34,4 +34,5 @@ public interface BrandOperations {
 
     @Operation(summary = "Delete brand")
     void deleteBrandById(@PathVariable Long brandId);
+
 }

@@ -31,38 +31,38 @@ public class BrandController implements BrandOperations {
 
     private final BrandService brandService;
 
-    @GetMapping
     @Override
+    @GetMapping
     public PageResponse<BrandResponse> getAllBrands(@RequestParam(defaultValue = "0") @Min(0) Integer offset,
                                              @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer limit) {
         return brandService.getAllBrands(offset, limit);
     }
 
-    @GetMapping("/{brandId}")
     @Override
+    @GetMapping("/{brandId}")
     public BrandResponse getBrandById(@PathVariable Long brandId) {
         return brandService.getBrandById(brandId);
     }
 
+    @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Validated(Marker.OnCreate.class)
-    @Override
     public BrandResponse createBrand(@RequestBody @Valid BrandRequest brandRequest) {
         return brandService.createBrand(brandRequest);
     }
 
+    @Override
     @PutMapping("/{brandId}")
     @Validated(Marker.OnUpdate.class)
-    @Override
     public BrandResponse updateBrandById(@PathVariable Long brandId,
                                          @RequestBody @Valid BrandRequest brandRequest) {
         return brandService.updateBrand(brandId, brandRequest);
     }
 
+    @Override
     @DeleteMapping("/{brandId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @Override
     public void deleteBrandById(@PathVariable Long brandId) {
         brandService.deleteBrandById(brandId);
     }

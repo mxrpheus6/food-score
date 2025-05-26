@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 
 @Embeddable
 public class Nutriments {
+
     @Column(name = "energy_kcal_100g")
     private Integer energyKcal100g;
 
@@ -36,4 +37,5 @@ public class Nutriments {
 
     @Column(name = "salt_100g", precision = 10, scale = 2)
     private BigDecimal salt100g;
+
 }

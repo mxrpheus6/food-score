@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Long> {
+
     Page<Brand> findAll(Pageable pageable);
+
     Boolean existsByName(String name);
+
 }

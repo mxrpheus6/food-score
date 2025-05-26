@@ -12,8 +12,6 @@ import com.mxrpheus.productservice.model.Brand;
 import com.mxrpheus.productservice.repository.BrandRepository;
 import com.mxrpheus.productservice.service.BrandService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -96,4 +94,5 @@ public class BrandServiceImpl implements BrandService {
 
         brandRepository.delete(brand);
     }
+
 }

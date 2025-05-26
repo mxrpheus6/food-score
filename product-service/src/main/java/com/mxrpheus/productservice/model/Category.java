@@ -19,6 +19,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "category")
 public class Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -26,4 +27,5 @@ public class Category {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+
 }

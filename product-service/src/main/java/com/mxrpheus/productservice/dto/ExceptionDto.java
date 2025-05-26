@@ -16,4 +16,6 @@ public record ExceptionDto(
 
         @Schema(description = "Timestamp when the error occurred", example = "2025-05-23T11:52:52.353Z")
         LocalDateTime timestamp
-) {}
+
+) {
+}

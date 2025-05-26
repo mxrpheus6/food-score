@@ -22,6 +22,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "additive")
 public class Additive {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -42,4 +43,5 @@ public class Additive {
     @Enumerated(EnumType.STRING)
     @Column(name = "risk_level", nullable = false)
     private RiskLevel riskLevel;
+
 }
