@@ -58,7 +58,7 @@ public class BrandController implements BrandOperations {
     @Validated(Marker.OnUpdate.class)
     public BrandResponse updateBrandById(@PathVariable Long brandId,
                                          @RequestBody @Valid BrandRequest brandRequest) {
-        return brandService.updateBrand(brandId, brandRequest);
+        return brandService.updateBrandById(brandId, brandRequest);
     }
 
     @Override

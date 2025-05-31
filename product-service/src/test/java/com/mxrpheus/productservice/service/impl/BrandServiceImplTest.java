@@ -1,8 +1,12 @@
 package com.mxrpheus.productservice.service.impl;
 
+import com.mxrpheus.productservice.constants.BrandExceptionMessageKeys;
 import com.mxrpheus.productservice.constants.TestDataConstants;
+import com.mxrpheus.productservice.dto.request.BrandRequest;
 import com.mxrpheus.productservice.dto.response.BrandResponse;
 import com.mxrpheus.productservice.dto.response.PageResponse;
+import com.mxrpheus.productservice.exception.brand.BrandAlreadyExistsException;
+import com.mxrpheus.productservice.exception.brand.BrandNotFoundException;
 import com.mxrpheus.productservice.mapper.BrandMapper;
 import com.mxrpheus.productservice.mapper.PageResponseMapper;
 import com.mxrpheus.productservice.model.Brand;
@@ -22,7 +26,11 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -66,7 +74,7 @@ public class BrandServiceImplTest {
 
         PageResponse<BrandResponse> actualResponse = brandService.getAllBrands(offset, limit);
 
-        assertThat(actualResponse).isSameAs(expected);
+        assertThat(actualResponse).isEqualTo(expected);
         verify(brandMapper).toResponse(TestDataConstants.BRAND);
         verify(pageResponseMapper).toDto(ArgumentMatchers.<Page<BrandResponse>>any());
     }
@@ -82,8 +90,163 @@ public class BrandServiceImplTest {
 
         BrandResponse actualResponse = brandService.getBrandById(brandId);
 
-        assertThat(actualResponse).isSameAs(expectedResponse);
+        assertThat(actualResponse).isEqualTo(expectedResponse);
         verify(brandServiceValidation).getBrandByIdWithChecks(brandId);
         verify(brandMapper).toResponse(brand);
     }
+
+    @Test
+    public void getBrandById_ThrowsException_BrandNotFound() {
+        Long brandId = TestDataConstants.BRAND_ID;
+        String messageKey = BrandExceptionMessageKeys.BRAND_NOT_FOUND_MESSAGE_KEY;
+        Object[] args = new Object[]{brandId};
+
+        when(brandServiceValidation.getBrandByIdWithChecks(brandId)).thenThrow(new BrandNotFoundException(messageKey, args));
+
+        assertThatThrownBy(() -> brandService.getBrandById(brandId))
+                .isInstanceOf(BrandNotFoundException.class)
+                .extracting("messageKey", "args")
+                .containsExactly(messageKey, args);
+
+        verify(brandServiceValidation).getBrandByIdWithChecks(brandId);
+        verify(brandMapper, never()).toResponse(any(Brand.class));
+    }
+
+    @Test
+    public void createBrand_ReturnsBrandResponse_ValidInputArguments() {
+        BrandRequest brandRequest = TestDataConstants.BRAND_REQUEST;
+        Brand brand = TestDataConstants.BRAND;
+        BrandResponse expectedResponse = TestDataConstants.BRAND_RESPONSE;
+
+        doNothing().when(brandServiceValidation).checkBrandAlreadyExists(brandRequest.name());
+
+        when(brandMapper.toEntity(brandRequest)).thenReturn(brand);
+        when(brandRepository.save(brand)).thenReturn(brand);
+        when(brandMapper.toResponse(brand)).thenReturn(expectedResponse);
+
+        BrandResponse actualResponse = brandService.createBrand(brandRequest);
+
+        assertThat(actualResponse).isEqualTo(expectedResponse);
+        verify(brandServiceValidation).checkBrandAlreadyExists(brandRequest.name());
+        verify(brandMapper).toEntity(brandRequest);
+        verify(brandRepository).save(brand);
+        verify(brandMapper).toResponse(brand);
+    }
+
+    @Test
+    public void createBrand_ThrowsException_BrandAlreadyExists() {
+        BrandRequest brandRequest = TestDataConstants.BRAND_REQUEST;
+        String messageKey = BrandExceptionMessageKeys.BRAND_ALREADY_EXISTS_MESSAGE_KEY;
+        Object[] args = new Object[]{brandRequest.name()};
+
+        doThrow(new BrandAlreadyExistsException(messageKey, args))
+                .when(brandServiceValidation).checkBrandAlreadyExists(brandRequest.name());
+
+        assertThatThrownBy(() -> brandService.createBrand(brandRequest))
+                .isInstanceOf(BrandAlreadyExistsException.class)
+                .extracting("messageKey", "args")
+                .containsExactly(messageKey, args);
+
+        verify(brandServiceValidation).checkBrandAlreadyExists(brandRequest.name());
+        verify(brandRepository, never()).save(any(Brand.class));
+    }
+
+    @Test
+    public void updateBrandById_ReturnsBrandResponse_ValidInputArguments() {
+        Long brandId = TestDataConstants.BRAND_ID;
+        BrandRequest brandRequest = TestDataConstants.BRAND_REQUEST;
+        Brand brand = TestDataConstants.BRAND;
+        BrandResponse expectedResponse = TestDataConstants.BRAND_RESPONSE;
+
+        when(brandServiceValidation.getBrandByIdWithChecks(brandId)).thenReturn(brand);
+        doNothing().when(brandServiceValidation).checkBrandAlreadyExists(brandRequest.name());
+        doNothing().when(brandMapper).updateBrandFromDto(brandRequest, brand);
+        when(brandRepository.save(brand)).thenReturn(brand);
+        when(brandMapper.toResponse(brand)).thenReturn(expectedResponse);
+
+        BrandResponse actualResponse = brandService.updateBrandById(brandId, brandRequest);
+
+        assertThat(actualResponse).isEqualTo(expectedResponse);
+        verify(brandServiceValidation).getBrandByIdWithChecks(brandId);
+        verify(brandServiceValidation).checkBrandAlreadyExists(brandRequest.name());
+        verify(brandMapper).updateBrandFromDto(brandRequest, brand);
+        verify(brandRepository).save(brand);
+        verify(brandMapper).toResponse(brand);
+    }
+
+    @Test
+    public void updateBrandById_ThrowsException_BrandNotFound() {
+        Long brandId = TestDataConstants.BRAND_ID;
+        BrandRequest brandRequest = TestDataConstants.BRAND_REQUEST;
+        String messageKey = BrandExceptionMessageKeys.BRAND_NOT_FOUND_MESSAGE_KEY;
+        Object[] args = new Object[]{brandId};
+
+        when(brandServiceValidation.getBrandByIdWithChecks(brandId))
+                .thenThrow(new BrandNotFoundException(messageKey, args));
+
+        assertThatThrownBy(() -> brandService.updateBrandById(brandId, brandRequest))
+                .isInstanceOf(BrandNotFoundException.class)
+                .extracting("messageKey", "args")
+                .containsExactly(messageKey, args);
+
+        verify(brandServiceValidation).getBrandByIdWithChecks(brandId);
+        verify(brandRepository, never()).save(any(Brand.class));
+    }
+
+    @Test
+    public void updateBrandById_ThrowsException_BrandAlreadyExists() {
+        Long brandId = TestDataConstants.BRAND_ID;
+        BrandRequest brandRequest = TestDataConstants.BRAND_REQUEST;
+        Brand brand = TestDataConstants.BRAND;
+        String messageKey = BrandExceptionMessageKeys.BRAND_ALREADY_EXISTS_MESSAGE_KEY;
+        Object[] args = new Object[] {brandRequest.name()};
+
+        when(brandServiceValidation.getBrandByIdWithChecks(brandId))
+                .thenReturn(brand);
+
+        doThrow(new BrandAlreadyExistsException(messageKey, args))
+                .when(brandServiceValidation).checkBrandAlreadyExists(brandRequest.name());
+
+        assertThatThrownBy(() -> brandService.updateBrandById(brandId, brandRequest))
+                .isInstanceOf(BrandAlreadyExistsException.class)
+                .extracting("messageKey", "args")
+                .containsExactly(messageKey, args);
+
+        verify(brandServiceValidation).getBrandByIdWithChecks(brandId);
+        verify(brandServiceValidation).checkBrandAlreadyExists(brandRequest.name());
+        verify(brandRepository, never()).save(any(Brand.class));
+    }
+
+    @Test
+    public void deleteBrandById_DeletesBrand_ValidInputArguments() {
+        Long brandId = TestDataConstants.BRAND_ID;
+        Brand brand = TestDataConstants.BRAND;
+
+        when(brandServiceValidation.getBrandByIdWithChecks(brandId)).thenReturn(brand);
+        doNothing().when(brandRepository).delete(brand);
+
+        brandService.deleteBrandById(brandId);
+
+        verify(brandServiceValidation).getBrandByIdWithChecks(brandId);
+        verify(brandRepository).delete(brand);
+    }
+
+    @Test
+    public void deleteBrandById_ThrowsException_BrandNotFound() {
+        Long brandId = TestDataConstants.BRAND_ID;
+        String messageKey = BrandExceptionMessageKeys.BRAND_NOT_FOUND_MESSAGE_KEY;
+        Object[] args = new Object[]{brandId};
+
+        when(brandServiceValidation.getBrandByIdWithChecks(brandId))
+                .thenThrow(new BrandNotFoundException(messageKey, args));
+
+        assertThatThrownBy(() -> brandService.deleteBrandById(brandId))
+                .isInstanceOf(BrandNotFoundException.class)
+                .extracting("messageKey", "args")
+                .containsExactly(messageKey, args);
+
+        verify(brandServiceValidation).getBrandByIdWithChecks(brandId);
+        verify(brandRepository, never()).delete(any(Brand.class));
+    }
+
 }

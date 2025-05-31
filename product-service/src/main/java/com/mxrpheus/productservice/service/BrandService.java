@@ -12,7 +12,7 @@ public interface BrandService {
 
     BrandResponse createBrand(BrandRequest brandRequest);
 
-    BrandResponse updateBrand(Long brandId, BrandRequest brandRequest);
+    BrandResponse updateBrandById(Long brandId, BrandRequest brandRequest);
 
     void deleteBrandById(Long brandId);
 

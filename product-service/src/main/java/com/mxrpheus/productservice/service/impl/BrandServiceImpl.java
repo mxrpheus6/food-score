@@ -53,7 +53,7 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     @Transactional
-    public BrandResponse updateBrand(Long brandId, BrandRequest brandRequest) {
+    public BrandResponse updateBrandById(Long brandId, BrandRequest brandRequest) {
         Brand brand = brandServiceValidation.getBrandByIdWithChecks(brandId);
 
         String brandName = brandRequest.name();
